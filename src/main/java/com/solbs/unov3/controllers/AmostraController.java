@@ -57,7 +57,7 @@ public class AmostraController {
     /**
      * Método HTTP que atualiza o Status da amostra
      * @param idAmostra id da amostra que terá o status atualizado
-     * @param status código int do novo status
+     * @param amostraDto código int do novo status
      * @return Entidade de resposta com a amostra atualizada
      */
     @PutMapping("/{idAmostra}")
