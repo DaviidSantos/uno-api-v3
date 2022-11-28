@@ -1,7 +1,10 @@
 package com.solbs.unov3.services;
 
+import com.solbs.unov3.dtos.EnsaioDto;
+import com.solbs.unov3.entities.Amostra;
 import com.solbs.unov3.entities.Ensaio;
 import com.solbs.unov3.repositories.EnsaioRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +16,33 @@ public class EnsaioService {
     @Autowired
     private EnsaioRepository ensaioRepository;
 
+    @Autowired
+    private AmostraService amostraService;
+
     /**
-     * Método que salva o ensaio na base de dados
-     * @param ensaio Ensaio a ser salvo
+     * Método que cadastra um ensaio na base de dados
+     * @param ensaioDto
+     * @return
+     */
+    @Transactional
+    public Ensaio cadastrarEnsaio(EnsaioDto ensaioDto) {
+        Ensaio ensaio = new Ensaio();
+        Amostra amostra = amostraService.procurarAmostra(ensaioDto.getAmostra());
+        BeanUtils.copyProperties(ensaioDto, ensaio);
+        ensaio.setAmostra(amostra);
+        return ensaioRepository.save(ensaio);
+    }
+
+    /**
+     * Método que cadastra um resultado de amostra
+     * @param idEnsaio Id do ensaio que terá resultado
+     * @param resultado Resultado do ensaio
      * @return Ensaio salvo
      */
     @Transactional
-    public Ensaio salvarEnsaio(Ensaio ensaio) {
+    public Ensaio resultadoEnsaio(String idEnsaio, EnsaioDto resultado) {
+        Ensaio ensaio = ensaioRepository.findById(idEnsaio).get();
+        ensaio.setResultadoDoEnsaio(resultado.getResultadoDoEnsaio());
         return ensaioRepository.save(ensaio);
     }
 
@@ -27,7 +50,7 @@ public class EnsaioService {
      * Método que retorna uma lista com todos os ensaios cadastrados
      * @return Lista de ensaios
      */
-    public List<Ensaio> procurarTodosOsEnsaios(){
+    public List<Ensaio> listarEnsaios(){
         return ensaioRepository.findAll();
     }
 
@@ -36,7 +59,7 @@ public class EnsaioService {
      * @param id Id do ensaio
      * @return Ensaio
      */
-    public Ensaio procurarEnsaioPeloId(String id) {
+    public Ensaio procurarEnsaio(String id) {
         return ensaioRepository.findById(id).get();
     }
 
@@ -48,4 +71,5 @@ public class EnsaioService {
     public List<Ensaio> procurarEnsaiosPorAmostra(Long idAmostra) {
         return ensaioRepository.findEnsaioByAmostra(idAmostra);
     }
+
 }

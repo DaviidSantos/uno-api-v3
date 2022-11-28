@@ -29,28 +29,12 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final RsaKeyProperties rsaKeys;
 
     public SecurityConfig(RsaKeyProperties rsaKeys) {
         this.rsaKeys = rsaKeys;
     }
-
-/*
-    @Bean
-    public InMemoryUserDetailsManager user(){
-        return new InMemoryUserDetailsManager(
-                User.withUsername("David")
-                        .password("{noop}senha")
-                        .authorities("ADMIN")
-                        .roles("ADMIN")
-                        .build()
-        );
-    }
-*/
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http

@@ -4,6 +4,7 @@ import com.solbs.unov3.dtos.SolicitacaoDeAnaliseDto;
 import com.solbs.unov3.entities.SolicitacaoDeAnalise;
 import com.solbs.unov3.entities.Solicitante;
 import com.solbs.unov3.repositories.SolicitacaoDeAnaliseRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,20 @@ public class SolicitacaoDeAnaliseService {
     @Autowired
     private SolicitacaoDeAnaliseRepository solicitacaoDeAnaliseRepository;
 
+    @Autowired
+    private SolicitanteService solicitanteService;
+
     /**
-     * Método que salva uma solicitação de análise na base de dados
-     * @param solicitacaoDeAnalise Solicitação a ser salva na base de dados
-     * @return Solicitação salva
+     * Método que cadastra uma Solicitação de Análise na base de dados
+     * @param solicitacaoDeAnaliseDto Dados da Solicitação de Análise
+     * @return Solicitação de Análise cadastrada
      */
     @Transactional
-    public SolicitacaoDeAnalise salvarSolicitacaoDeAnalise(SolicitacaoDeAnalise solicitacaoDeAnalise){
+    public SolicitacaoDeAnalise cadastrarSolicitacaoDeAnalise(SolicitacaoDeAnaliseDto solicitacaoDeAnaliseDto) {
+        SolicitacaoDeAnalise solicitacaoDeAnalise = new SolicitacaoDeAnalise();
+        BeanUtils.copyProperties(solicitacaoDeAnaliseDto, solicitacaoDeAnalise);
+        Solicitante solicitante = solicitanteService.procurarSolicitante(solicitacaoDeAnaliseDto.getCnpj());;
+        solicitacaoDeAnalise.setSolicitante(solicitante);
         return solicitacaoDeAnaliseRepository.save(solicitacaoDeAnalise);
     }
 
@@ -29,7 +37,7 @@ public class SolicitacaoDeAnaliseService {
      * Método que retorna uma lista com todas as Solicitações de Análise
      * @return Lista de Solicitações de Análise
      */
-    public List<SolicitacaoDeAnalise> procurarTodasSolicitacoesDeAnalise(){
+    public List<SolicitacaoDeAnalise> listarSolicitacoesDeAnalise(){
         return solicitacaoDeAnaliseRepository.findAll();
     }
 
@@ -38,17 +46,30 @@ public class SolicitacaoDeAnaliseService {
      * @param idSA ID da Solicitação de Análise
      * @return Solicitação de Análise
      */
-    public SolicitacaoDeAnalise procurarSolicitacaoDeAnalisePeloId(String idSA) {
+    public SolicitacaoDeAnalise procurarSolicitacaoDeAnalise(String idSA) {
         return solicitacaoDeAnaliseRepository.findById(idSA).get();
     }
 
     /**
-     * Método que retorna uma lista de Solicitações de Análise de um solicitante
-     * @param solicitante Solicitante das Solicitações de Análise
+     * Método que retorna uma lista de Solicitações de Análise de um Solicitante
+     * @param cnpj Cnpj do Solicitante das Solicitações de Análise
      * @return Lista de Solicitações de Análise
      */
-    public List<SolicitacaoDeAnalise> procurarSolicitacaoDeAnalisePeloSolicitante(Solicitante solicitante){
+    public List<SolicitacaoDeAnalise> procurarSAPeloSolicitante(String cnpj){
+        Solicitante solicitante = solicitanteService.procurarSolicitante(cnpj);
         return solicitacaoDeAnaliseRepository.findSolicitacaoDeAnaliseBySolicitante(solicitante);
+    }
+
+    /**
+     * Método que atualiza os dados de uma Solicitação de Análise
+     * @param idSA Id da Solicitação de Análise que será atualizada
+     * @param solicitacaoDeAnaliseDto Dados que serão atualizados
+     * @return Solicitação de Análise Atualizada
+     */
+    @Transactional
+    public SolicitacaoDeAnalise atualizarSolicitacaoDeAnalise(String idSA, SolicitacaoDeAnaliseDto solicitacaoDeAnaliseDto) {
+        SolicitacaoDeAnalise solicitacaoDeAnalise = solicitacaoDeAnaliseRepository.findById(idSA).get();
+        return solicitacaoDeAnaliseRepository.save(atualizarDadosSolicitacaoDeAnalise(solicitacaoDeAnalise, solicitacaoDeAnaliseDto));
     }
 
     /**

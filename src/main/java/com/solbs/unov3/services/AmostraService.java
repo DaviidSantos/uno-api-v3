@@ -1,13 +1,17 @@
 package com.solbs.unov3.services;
 
+import com.solbs.unov3.dtos.AmostraDto;
 import com.solbs.unov3.dtos.QuantidadeDeAmostraPorStatusDto;
 import com.solbs.unov3.entities.Amostra;
 import com.solbs.unov3.entities.SolicitacaoDeAnalise;
+import com.solbs.unov3.entities.enums.StatusAmostra;
 import com.solbs.unov3.repositories.AmostraRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -15,21 +19,45 @@ public class AmostraService {
     @Autowired
     private AmostraRepository amostraRepository;
 
+    @Autowired
+    private SolicitacaoDeAnaliseService solicitacaoDeAnaliseService;
+
     /**
-     * Método que salva uma amostra na base de dados
-     * @param amostra Amostra a ser salva
-     * @return Amostra salva
+     * Método que cadastra uma amostra na base de dados
+     * @param amostraDto Dados da amostra que será cadastrada
+     * @return Amostra cadastrada
      */
     @Transactional
-    public Amostra salvarAmostra(Amostra amostra){
+    public Amostra cadastrarAmostra(AmostraDto amostraDto) {
+        Amostra amostra = new Amostra();
+        SolicitacaoDeAnalise solicitacaoDeAnalise = solicitacaoDeAnaliseService.procurarSolicitacaoDeAnalise(amostraDto.getSolicitacaoDeAnalise());
+        BeanUtils.copyProperties(amostraDto, amostra);
+        StatusAmostra statusAmostra = StatusAmostra.Aguardando_Análise;
+        amostra.setStatusAmostra(statusAmostra);
+        amostra.setSolicitacaoDeAnalise(solicitacaoDeAnalise);
+        amostra.setDataDeEntrada(Instant.now());
         return amostraRepository.save(amostra);
+    }
+
+    /**
+     * Método que atualiza o status de uma amostra
+     * @param idAmostra Id da amostra que será atualizada
+     * @param status código do status
+     * @return Amostra atualizada
+     */
+    @Transactional
+    public Amostra atualizarStatus(String idAmostra, int status) {
+        Amostra amostra = amostraRepository.findById(idAmostra).get();
+        StatusAmostra statusAmostra = StatusAmostra.valor(status);
+        amostra.setStatusAmostra(statusAmostra);
+        return amostra;
     }
 
     /**
      * Método que retorna todas as amostras cadastradas
      * @return Lista de amostras
      */
-    public List<Amostra> procurarTodasAsAmostras(){
+    public List<Amostra> listarAmostrar(){
         return amostraRepository.findAll();
     }
 
@@ -38,7 +66,7 @@ public class AmostraService {
      * @param idAmostra Id da amostra
      * @return Amostra
      */
-    public Amostra procurarAmostraPeloId(String idAmostra) {
+    public Amostra procurarAmostra(String idAmostra) {
         return amostraRepository.findById(idAmostra).get();
     }
 

@@ -22,7 +22,7 @@ public class Amostra implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amostra_seq")
     @GenericGenerator(name = "amostra_seq", strategy = "com.solbs.unov3.entities.customid.IdPrefixado",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = IdPrefixado.INCREMENT_PARAM, value = "100"),
+                    @org.hibernate.annotations.Parameter(name = IdPrefixado.INCREMENT_PARAM, value = "1"),
                     @org.hibernate.annotations.Parameter(name = IdPrefixado.VALUE_PREFIX_PARAMETER, value = "AM_"),
                     @org.hibernate.annotations.Parameter(name = IdPrefixado.NUMBER_FORMAT_PARAMETER, value = "%05d")
             })

@@ -1,11 +1,9 @@
 package com.solbs.unov3.controllers;
 
 import com.solbs.unov3.dtos.UsuarioDto;
-import com.solbs.unov3.entities.Cargo;
 import com.solbs.unov3.entities.Usuario;
 
 import com.solbs.unov3.services.UsuarioService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,15 +30,7 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Object> cadastrarUsuario(@RequestBody UsuarioDto usuarioDto){
-        if (usuarioService.existsByEmail(usuarioDto.getEmail())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já cadastrado");
-        }
-
-        Usuario usuario = new Usuario();
-        BeanUtils.copyProperties(usuarioDto, usuario);
-        Cargo cargo = usuarioService.procurarCargo(usuarioDto.getCargo());
-        usuario.setCargo(cargo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvarUsuario(usuario));
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.cadastrarUsuario(usuarioDto));
     }
 
     /**
@@ -49,8 +39,8 @@ public class UsuarioController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<Usuario>> retornarTodosUsuarios(){
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.procurarTodosUsuarios());
+    public ResponseEntity<List<Usuario>> listarUsuarios(){
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
     }
 
     /**
@@ -60,8 +50,8 @@ public class UsuarioController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<Usuario> retornarUsuarioPeloId(@PathVariable String idUsuario){
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.procurarUsuarioPorId(idUsuario));
+    public ResponseEntity<Usuario> procurarUsuario(@PathVariable String idUsuario){
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.procurarUsuario(idUsuario));
     }
 
     /**
@@ -72,8 +62,7 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Object> deletarUsuario(@PathVariable String idUsuario){
-        Usuario usuario = usuarioService.procurarUsuarioPorId(idUsuario);
-        usuarioService.deletarUsuario(usuario);
+        usuarioService.deletarUsuario(idUsuario);
         return ResponseEntity.status(HttpStatus.OK).body("Usuário Deletado com Sucesso!");
     }
 
@@ -86,8 +75,7 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{idUsuario}")
     public ResponseEntity<Usuario> alterarSenha(@RequestBody String novaSenha, @PathVariable String idUsuario){
-        Usuario usuario = usuarioService.procurarUsuarioPorId(idUsuario);
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.alterarSenha(usuario, novaSenha));
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.alterarSenha(idUsuario, novaSenha));
     }
 
 }

@@ -21,7 +21,7 @@ public class Usuario implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "us_seq")
     @GenericGenerator(name = "us_seq", strategy = "com.solbs.unov3.entities.customid.IdPrefixado",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = IdPrefixado.INCREMENT_PARAM, value = "100"),
+                    @org.hibernate.annotations.Parameter(name = IdPrefixado.INCREMENT_PARAM, value = "1"),
                     @org.hibernate.annotations.Parameter(name = IdPrefixado.VALUE_PREFIX_PARAMETER, value = "US_"),
                     @org.hibernate.annotations.Parameter(name = IdPrefixado.NUMBER_FORMAT_PARAMETER, value = "%05d")
             })
