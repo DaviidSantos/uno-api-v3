@@ -27,7 +27,6 @@ public class UsuarioController {
      * @param usuarioDto Dados do usuário que será cadastrado
      * @return Entidade de Resposta com Usuário cadastrado
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Object> cadastrarUsuario(@RequestBody UsuarioDto usuarioDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.cadastrarUsuario(usuarioDto));
@@ -37,7 +36,6 @@ public class UsuarioController {
      * Método HTTP que retorna todos os usuários cadastrados na base de dados
      * @return Entidade de Resposta com Lista de Usuários Cadastrados
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Usuario>> listarUsuarios(){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
@@ -48,7 +46,6 @@ public class UsuarioController {
      * @param idUsuario Id do Usuário que será retornado
      * @return Entidade de Resposta com Usuário
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{idUsuario}")
     public ResponseEntity<Usuario> procurarUsuario(@PathVariable String idUsuario){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.procurarUsuario(idUsuario));
@@ -72,7 +69,6 @@ public class UsuarioController {
      * @param idUsuario Id do usuário cuja senha será alteraa
      * @return Entidade de Resposta com usuário atualizado
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{idUsuario}")
     public ResponseEntity<Usuario> alterarSenha(@RequestBody String novaSenha, @PathVariable String idUsuario){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.alterarSenha(idUsuario, novaSenha));

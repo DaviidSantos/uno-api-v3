@@ -4,7 +4,6 @@ import com.solbs.unov3.dtos.AmostraDto;
 import com.solbs.unov3.dtos.QuantidadeDeAmostraPorStatusDto;
 import com.solbs.unov3.entities.Amostra;
 import com.solbs.unov3.entities.SolicitacaoDeAnalise;
-import com.solbs.unov3.entities.enums.StatusAmostra;
 import com.solbs.unov3.services.AmostraService;
 import com.solbs.unov3.services.SolicitacaoDeAnaliseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +61,8 @@ public class AmostraController {
      * @return Entidade de resposta com a amostra atualizada
      */
     @PutMapping("/{idAmostra}")
-    public ResponseEntity<Amostra> atualizarStatusDaAmostra(@PathVariable String idAmostra, @RequestBody int status){
-        return ResponseEntity.status(HttpStatus.OK).body(amostraService.atualizarStatus(idAmostra, status));
+    public ResponseEntity<Amostra> atualizarStatusDaAmostra(@PathVariable String idAmostra, @RequestBody AmostraDto amostraDto){
+        return ResponseEntity.status(HttpStatus.OK).body(amostraService.atualizarStatus(idAmostra, amostraDto.getStatusAmostra()));
     }
 
     /**

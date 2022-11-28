@@ -2,7 +2,7 @@ package com.solbs.unov3.dtos;
 
 import com.solbs.unov3.entities.enums.Cargos;
 
-import javax.persistence.Column;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
