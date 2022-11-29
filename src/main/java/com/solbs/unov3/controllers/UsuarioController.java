@@ -56,7 +56,6 @@ public class UsuarioController {
      * @param idUsuario Id do Usuário que será deletado
      * @return Entidade de Resposta
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Object> deletarUsuario(@PathVariable String idUsuario){
         usuarioService.deletarUsuario(idUsuario);
