@@ -63,7 +63,7 @@ public class SolicitacaoDeAnaliseController {
      * @param cnpj Cnpj do Solicitante das Solicitações de Análise
      * @return Entidade de resposta com lista de Solicitações de Análise
      */
-    @GetMapping("/solicitante/{solicitante}")
+    @GetMapping("/solicitante/{cnpj}")
     public ResponseEntity<List<SolicitacaoDeAnalise>> solicitacaoDeAnalisePorSolicitante(@PathVariable String cnpj){
         return ResponseEntity.status(HttpStatus.OK).body(solicitacaoDeAnaliseService.procurarSAPeloSolicitante(cnpj));
     }

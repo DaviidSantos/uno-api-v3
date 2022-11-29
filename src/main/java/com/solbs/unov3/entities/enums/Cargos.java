@@ -2,13 +2,13 @@ package com.solbs.unov3.entities.enums;
 
 public enum Cargos {
     ADMIN(1),
-    ANÁLISTA(2),
+    ANALISTA(2),
     VENDEDOR(3),
-    EXPEDIÇÃO(4);
+    EXPEDICAO(4);
 
     private int code;
 
-    Cargos(int code) {
+    Cargos(int code){
         this.code = code;
     }
 

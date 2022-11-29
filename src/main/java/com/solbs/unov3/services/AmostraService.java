@@ -32,7 +32,7 @@ public class AmostraService {
         Amostra amostra = new Amostra();
         SolicitacaoDeAnalise solicitacaoDeAnalise = solicitacaoDeAnaliseService.procurarSolicitacaoDeAnalise(amostraDto.getSolicitacaoDeAnalise());
         BeanUtils.copyProperties(amostraDto, amostra);
-        StatusAmostra statusAmostra = StatusAmostra.Aguardando_Análise;
+        StatusAmostra statusAmostra = StatusAmostra.Aguardando_Analise;
         amostra.setStatusAmostra(statusAmostra);
         amostra.setSolicitacaoDeAnalise(solicitacaoDeAnalise);
         amostra.setDataDeEntrada(Instant.now());
